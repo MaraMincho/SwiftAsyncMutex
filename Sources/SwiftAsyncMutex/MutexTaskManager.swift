@@ -59,7 +59,7 @@ actor AsyncMutexManager: Equatable, Identifiable {
     }
   }
 
-  public func isFinish() async -> Void {
+  public func waitForFinish() async -> Void {
     return await withCheckedContinuation { continuation in
       var cancellable: AnyCancellable?
       cancellable = isFinishPublisher

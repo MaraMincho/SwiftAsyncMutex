@@ -25,7 +25,7 @@ final class AsyncSwiftMutexTests: XCTestCase {
 
       group.addTask {
         print("\(#function) wait task finished")
-        await mutex.isFinish()
+        await mutex.waitForFinish()
         print("\(#function) finished all task")
         testExpectation.fulfill()
 
@@ -37,7 +37,7 @@ final class AsyncSwiftMutexTests: XCTestCase {
   }
 
   @available(macOS 10.15, iOS 15.0, *)
-  func test_MultipleOfIsFinish() async {
+  func test_MultipleOfWaitForFinish() async {
     let mutex = AsyncMutexManager(mutexCount: 1)
     let firstTestExpectation: XCTestExpectation = .init()
     let secondTestExpectation: XCTestExpectation = .init()
@@ -58,7 +58,7 @@ final class AsyncSwiftMutexTests: XCTestCase {
       }
       group.addTask {
         print( "\(#function) wait task finished")
-        await mutex.isFinish()
+        await mutex.waitForFinish()
         print("\(#function) finished all task")
         firstTestExpectation.fulfill()
       }
@@ -76,7 +76,7 @@ final class AsyncSwiftMutexTests: XCTestCase {
       group.addTask {
         sleep(16) // wait prev task
         print("\(#function) wait task finished")
-        await mutex.isFinish()
+        await mutex.waitForFinish()
         print("\(#function) finished all task")
         secondTestExpectation.fulfill()
       }
@@ -106,7 +106,7 @@ final class AsyncSwiftMutexTests: XCTestCase {
 
       group.addTask {
         print("\(#function) wait task finished")
-        await mutex.isFinish()
+        await mutex.waitForFinish()
         print("\(#function) finished all task")
         testExpectation.fulfill()
       }
