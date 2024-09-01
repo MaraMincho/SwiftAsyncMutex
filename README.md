@@ -21,7 +21,7 @@ Task {
 
 // Waiting for all tasks to finish
 Task {
-    await mutex.isFinish() // Wait until all tasks are done
+    await mutex.waitForFinish() // Wait until all tasks are done
     // ... Code that you want to run when all tasks are finished ...
 }
 ```
