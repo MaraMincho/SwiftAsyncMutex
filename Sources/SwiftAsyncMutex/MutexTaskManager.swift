@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @available(macOS 10.15, iOS 13.0, *)
-actor AsyncMutexManager: Equatable, Identifiable {
+public actor AsyncMutexManager: Equatable, Identifiable {
   public static func == (lhs: AsyncMutexManager, rhs: AsyncMutexManager) -> Bool {
     lhs.id == rhs.id
   }
