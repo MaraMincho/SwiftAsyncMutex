@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @available(macOS 10.15, iOS 13.0, *)
-public actor AsyncMutexManager: Equatable, Identifiable {
+public actor AsyncMutexManager: Equatable, Identifiable, Sendable {
   public static func == (lhs: AsyncMutexManager, rhs: AsyncMutexManager) -> Bool {
     lhs.id == rhs.id
   }
@@ -39,14 +39,12 @@ public actor AsyncMutexManager: Equatable, Identifiable {
       await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
         cancellable = justOneMutexFinishPublisher.sink { val in
           if myTaskCount == val {
-            cancellable = nil
             continuation.resume(returning: ())
           }
         }
       }
       cancellable = nil
     }
-
     currentTaskCount -= 1
   }
 
