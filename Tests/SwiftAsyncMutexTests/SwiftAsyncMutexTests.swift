@@ -1,14 +1,23 @@
-import XCTest
+//
+//  Test.swift
+//  SwifAsynctMutex
+//
+//  Created by MaraMincho on 10/14/24.
+//
+
+import Testing
 @testable import SwiftAsyncMutex
 import Combine
+import Foundation
 
-final class AsyncSwiftMutexTests: XCTestCase {
+
+
+struct SwiftAsyncMutexTests {
 
   @available(macOS 10.15, iOS 15.0, *)
-  func test_MutexTaskManager() async {
+  @Test func mutexTaskManager() async throws {
     let startDate = Date.now
     let mutex = AsyncMutexManager(mutexCount: 1)
-    let testExpectation: XCTestExpectation = .init()
 
     let innerTaskAction: (_ index: Int) async -> Void = { ind in
       print("\(#function) \(ind) task will run")
@@ -27,20 +36,16 @@ final class AsyncSwiftMutexTests: XCTestCase {
         print("\(#function) wait task finished")
         await mutex.waitForFinish()
         print("\(#function) finished all task")
-        testExpectation.fulfill()
 
       }
     }
     let endDate = Date.now
-    await fulfillment(of: [testExpectation])
-    XCTAssertTrue(Int(endDate.timeIntervalSince(startDate).rounded()) == 15)
+    #expect(Int(endDate.timeIntervalSince(startDate).rounded()) == 15)
   }
 
   @available(macOS 10.15, iOS 15.0, *)
-  func test_MultipleOfWaitForFinish() async {
+  @Test func multipleOfWaitForFinish() async {
     let mutex = AsyncMutexManager(mutexCount: 1)
-    let firstTestExpectation: XCTestExpectation = .init()
-    let secondTestExpectation: XCTestExpectation = .init()
 
     let innerTaskAction: (_ index: Int) async -> Void = { ind in
       print("\(#function) \(ind) task will run")
@@ -60,7 +65,6 @@ final class AsyncSwiftMutexTests: XCTestCase {
         print( "\(#function) wait task finished")
         await mutex.waitForFinish()
         print("\(#function) finished all task")
-        firstTestExpectation.fulfill()
       }
 
       // FinalTask
@@ -78,18 +82,15 @@ final class AsyncSwiftMutexTests: XCTestCase {
         print("\(#function) wait task finished")
         await mutex.waitForFinish()
         print("\(#function) finished all task")
-        secondTestExpectation.fulfill()
       }
     }
-
-    await fulfillment(of: [firstTestExpectation, secondTestExpectation])
   }
 
   @available(macOS 10.15, iOS 15.0, *)
-  func test_MultipleOfMutex() async {
+  @Test func multipleOfMutex() async {
     let startDate = Date.now
     let mutex = AsyncMutexManager(mutexCount: 3)
-    let testExpectation: XCTestExpectation = .init()
+
 
     let innerTaskAction: (_ index: Int) async -> Void = { ind in
       print("\(#function) \(ind) task will run")
@@ -108,11 +109,9 @@ final class AsyncSwiftMutexTests: XCTestCase {
         print("\(#function) wait task finished")
         await mutex.waitForFinish()
         print("\(#function) finished all task")
-        testExpectation.fulfill()
       }
     }
     let endDate = Date.now
-    await fulfillment(of: [testExpectation])
-    XCTAssertTrue(Int(endDate.timeIntervalSince(startDate).rounded()) == 5)
+    #expect(Int(endDate.timeIntervalSince(startDate).rounded()) == 5)
   }
 }
